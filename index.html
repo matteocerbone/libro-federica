@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Motivi per cui Ti Amo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #8b4513;
+            --secondary-color: #a05252;
+            --accent-color: #c17c74;
+            --background-color: #fefafa;
+            --page-color: #fffaf5;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            background: var(--background-color);
+            color: #333;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: pan-y;
+            -webkit-tap-highlight-color: transparent;
+            position: fixed;
+            width: 100%;
+        }
+
+        .book-container {
+            width: 95vw;
+            height: 95vh;
+            perspective: 1200px;
+            position: relative;
+            max-width: 800px;
+            max-height: 600px;
+        }
+
+        /* Mobile First */
+        @media (max-width: 768px) {
+            .book-container {
+                width: 100vw;
+                height: 100vh;
+                max-width: none;
+                max-height: none;
+                perspective: 1000px;
+            }
+        }
+
+        /* Small phones */
+        @media (max-width: 380px) {
+            .book-container {
+                height: 95vh;
+            }
+        }
+
+        .book {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: var(--page-color);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            backface-visibility: hidden;
+            border: 1px solid #f0e6e6;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        /* Fix scroll per iOS */
+        .page::-webkit-scrollbar {
+            display: none;
+        }
+
+        .page {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Mobile page adjustments */
+        @media (max-width: 768px) {
+            .page {
+                box-shadow: 0 0 10px rgba(0,0,0,0.08);
+                border-radius: 5px;
+                overflow-y: auto;
+            }
+        }
+
+        .cover {
+            padding: 0 !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fffaf5 0%, #fef0f0 100%);
+        }
+
+        .cover-content {
+            text-align: center;
+            width: 100%;
+            padding: 2rem;
+        }
+
+        .cover h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.2rem, 8vw, 3.5rem);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            padding: 0 1rem;
+        }
+
+        .author {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.3rem, 5vw, 1.8rem);
+            font-style: italic;
+            margin-top: 2rem;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        .page:not(.cover) {
+            padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .page:not(.cover) {
+                padding: 1.5rem;
+            }
+            
+            .cover-content {
+                padding: 1rem;
+            }
+        }
+
+        .page-content {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Mobile intro text */
+        @media (max-width: 768px) {
+            .page-content {
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .intro-text {
+                font-size: 1.1rem;
+                line-height: 1.6;
+                flex: 1;
+                overflow-y: auto;
+            }
+            
+            .intro-text p {
+                margin-bottom: 1.2rem;
+            }
+            
+            .intro-header {
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .signature {
+                margin-top: 2rem;
+                font-size: 1.4rem;
+            }
+        }
+
+        .intro-text {
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
+            line-height: 1.7;
+            text-align: left;
+            color: #444;
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 0;
+        }
+
+        .intro-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .intro-header {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.8rem, 6vw, 2.2rem);
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .signature {
+            margin-top: 2rem;
+            font-family: 'Dancing Script', cursive;
+            font-style: italic;
+            text-align: right;
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
+            color: var(--secondary-color);
+        }
+
+        .reason-page .page-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+            padding: 1rem;
+        }
+
+        /* Mobile reason pages */
+        @media (max-width: 768px) {
+            .reason-page .page-content {
+                padding: 1rem;
+                justify-content: center;
+            }
+            
+            .simple-number {
+                font-size: 2.8rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .reason-text {
+                font-size: 1.4rem;
+                line-height: 1.5;
+                max-width: 95%;
+            }
+        }
+
+        .simple-number {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.8rem, 8vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(45deg, #c17c74, #d4a5a5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .reason-text {
+            font-family: 'Crimson Text', serif;
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
+            line-height: 1.5;
+            max-width: 500px;
+            text-align: center;
+            color: #555;
+            font-style: italic;
+        }
+
+        /* Mobile navigation */
+        .page-indicator {
+            position: fixed;
+            bottom: 70px;
+            right: 15px;
+            background: rgba(139, 69, 19, 0.95);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            z-index: 1000;
+            font-family: 'Crimson Text', serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            pointer-events: auto;
+        }
+
+        @media (max-width: 768px) {
+            .page-indicator {
+                bottom: 80px;
+                right: 10px;
+                font-size: 0.85rem;
+                padding: 8px 12px;
+            }
+        }
+
+        .page-input {
+            width: 50px;
+            padding: 5px;
+            border: none;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Crimson Text', serif;
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .page-input:focus {
+            outline: 2px solid var(--accent-color);
+        }
+
+        /* Mobile navigation buttons */
+        .navigation {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 15px;
+            width: 90%;
+            max-width: 320px;
+            justify-content: space-between;
+            pointer-events: auto;
+        }
+
+        @media (max-width: 768px) {
+            .navigation {
+                bottom: 20px;
+                width: 95%;
+                max-width: 300px;
+                gap: 10px;
+            }
+        }
+
+        .nav-btn {
+            background: rgba(139, 69, 19, 0.95);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            min-width: 120px;
+            font-family: 'Crimson Text', serif;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            touch-action: manipulation;
+            pointer-events: auto;
+        }
+
+        @media (max-width: 768px) {
+            .nav-btn {
+                padding: 16px 20px;
+                min-width: 110px;
+                font-size: 0.95rem;
+            }
+        }
+
+        .nav-btn:hover {
+            background: rgba(160, 82, 82, 1);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0px);
+            background: rgba(139, 69, 19, 1);
+        }
+
+        .nav-btn:disabled {
+            background: rgba(139, 69, 19, 0.4);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Animation improvements */
+        .page.flipping-forward {
+            transform: rotateY(-180deg);
+            z-index: 10;
+        }
+
+        .page.flipping-backward {
+            transform: rotateY(0deg);
+            z-index: 10;
+        }
+
+        .page.active {
+            z-index: 2;
+            transform: rotateY(0deg);
+        }
+
+        .page:not(.active) {
+            display: none;
+        }
+
+        .page.prev-page {
+            transform: rotateY(-180deg);
+        }
+
+        /* Touch zones for navigation */
+        .touch-zone {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 30%;
+            z-index: 5;
+            pointer-events: auto;
+        }
+
+        .touch-zone.left {
+            left: 0;
+        }
+
+        .touch-zone.right {
+            right: 0;
+        }
+
+        /* Mobile landscape orientation */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .book-container {
+                height: 90vh;
+            }
+            
+            .navigation {
+                bottom: 10px;
+            }
+            
+            .page-indicator {
+                bottom: 60px;
+            }
+            
+            .intro-text {
+                font-size: 1rem;
+            }
+        }
+
+        /* Very small phones */
+        @media (max-width: 360px) {
+            .cover h1 {
+                font-size: 2rem;
+            }
+            
+            .intro-header {
+                font-size: 1.6rem;
+            }
+            
+            .reason-text {
+                font-size: 1.2rem;
+            }
+            
+            .nav-btn {
+                min-width: 100px;
+                padding: 14px 16px;
+            }
+            
+            .page-indicator {
+                bottom: 75px;
+            }
+        }
+
+        /* Prevent zoom on input focus for iOS */
+        @media (max-width: 768px) {
+            .page-input {
+                font-size: 16px;
+            }
+        }
+
+        /* Scroll indicator for intro page */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            opacity: 0.7;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+            40% {transform: translateX(-50%) translateY(-5px);}
+            60% {transform: translateX(-50%) translateY(-3px);}
+        }
+
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                bottom: 5px;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="book-container">
+        <div class="book">
+            <!-- Touch zones for mobile navigation -->
+            <div class="touch-zone left" id="touch-prev"></div>
+            <div class="touch-zone right" id="touch-next"></div>
+
+            <!-- COPERTINA -->
+            <div class="page cover active" id="page-1">
+                <div class="cover-content">
+                    <h1>100 Motivi<br>per cui Ti Amo</h1>
+                    <div class="author">di Matteo</div>
+                </div>
+            </div>
+
+            <!-- INTRODUZIONE -->
+            <div class="page" id="page-2">
+                <div class="page-content">
+                    <div class="intro-header">Introduzione</div>
+                    <div class="intro-text">
+                        <p>Cara Federica,</p>
+                        <p>ho deciso di dedicarti questo piccolo libro in cui racchiudo i motivi più sinceri e puri per il quale ti amo e sto imparando ad amarti. Ovviamente ce ne sarebbero altri ma consideriamolo questo come un primo volume (se fai la brava farò uscire anche il secondo ahahaha).</p>
+                        <p>In questa introduzione voglio chiederti grazie di tutto, per essere qui con me, per amarmi e scegliermi ogni giorno, sono grato alla vita.</p>
+                        <p>Vorrei dedicarti più tempo ma sei così comprensiva nei miei confronti che sai che tutto ciò che faccio attualmente lo faccio anche per noi oltre che per me stesso. Sei la mia forza, e se mi sento di star arrivando in alto il merito è anche tuo che in me ci credi più di quanto lo faccia io.</p>
+                        <p>Sai che su di me puoi sempre contare in qualsiasi situazione anche se so che, al mio fianco, ho una piccola grande donna capace di tutto e che niente può fermarla; però concedimi di rialzarti quando ti senti di cadere, insieme siamo più forti.</p>
+                        <p>Buon compleanno amore mio, spero che questa idea ti piaccia.</p>
+                        <p>Buona lettura.</p>
+                        <div class="signature">- M</div>
+                    </div>
+                    <div class="scroll-indicator">Scorri per leggere tutto ↓</div>
+                </div>
+            </div>
+
+            <!-- MOTIVI 1-100 -->
+            <div class="page reason-page" id="page-3"><div class="page-content"><div class="simple-number">1.</div><div class="reason-text">Ti amo perché mi fai sentire vivo.</div></div></div>
+            <div class="page reason-page" id="page-4"><div class="page-content"><div class="simple-number">2.</div><div class="reason-text">Ti amo perché con te mi sento invincibile.</div></div></div>
+            <div class="page reason-page" id="page-5"><div class="page-content"><div class="simple-number">3.</div><div class="reason-text">Ti amo perché grazie a te vedo il mondo a colori e non più bianco e nero.</div></div></div>
+            <div class="page reason-page" id="page-6"><div class="page-content"><div class="simple-number">4.</div><div class="reason-text">Ti amo perché mi basta guardarti per ritornare a sorridere.</div></div></div>
+            <div class="page reason-page" id="page-7"><div class="page-content"><div class="simple-number">5.</div><div class="reason-text">Ti amo per tutte le risate senza motivo.</div></div></div>
+            <div class="page reason-page" id="page-8"><div class="page-content"><div class="simple-number">6.</div><div class="reason-text">Ti amo per la nostra intimità così pura e intensa.</div></div></div>
+            <div class="page reason-page" id="page-9"><div class="page-content"><div class="simple-number">7.</div><div class="reason-text">Ti amo per il nostro gioco di sguardi.</div></div></div>
+            <div class="page reason-page" id="page-10"><div class="page-content"><div class="simple-number">8.</div><div class="reason-text">Ti amo per il modo in cui ci tocchiamo, così profondo e delicato che solo noi sappiamo.</div></div></div>
+            <div class="page reason-page" id="page-11"><div class="page-content"><div class="simple-number">9.</div><div class="reason-text">Ti amo perché il nostro silenzio a volte vale più di mille parole.</div></div></div>
+            <div class="page reason-page" id="page-12"><div class="page-content"><div class="simple-number">10.</div><div class="reason-text">Ti amo perché vedi in me cose che io non vedo.</div></div></div>
+
+            <div class="page reason-page" id="page-13"><div class="page-content"><div class="simple-number">11.</div><div class="reason-text">Ti amo perché il tuo buongiorno mi migliora la giornata.</div></div></div>
+            <div class="page reason-page" id="page-14"><div class="page-content"><div class="simple-number">12.</div><div class="reason-text">Ti amo perché la tua buonanotte (quando riesci a darmela) mi fa sentire più sereno.</div></div></div>
+            <div class="page reason-page" id="page-15"><div class="page-content"><div class="simple-number">13.</div><div class="reason-text">Ti amo perché riesci a notare ogni singolo dettaglio, anche di cose a cui io non do importanza.</div></div></div>
+            <div class="page reason-page" id="page-16"><div class="page-content"><div class="simple-number">14.</div><div class="reason-text">Ti amo perché mi chiedi sempre come mi va la giornata.</div></div></div>
+            <div class="page reason-page" id="page-17"><div class="page-content"><div class="simple-number">15.</div><div class="reason-text">Ti amo perché mi chiedi sempre cosa mangio.</div></div></div>
+            <div class="page reason-page" id="page-18"><div class="page-content"><div class="simple-number">16.</div><div class="reason-text">Ti amo perché ti preoccupi sempre di me quando mi alleno.</div></div></div>
+            <div class="page reason-page" id="page-19"><div class="page-content"><div class="simple-number">17.</div><div class="reason-text">Ti amo perché ti preoccupi ogni qualvolta prendo lo scooter.</div></div></div>
+            <div class="page reason-page" id="page-20"><div class="page-content"><div class="simple-number">18.</div><div class="reason-text">Ti amo perché mi raccomandi sempre di andare piano.</div></div></div>
+            <div class="page reason-page" id="page-21"><div class="page-content"><div class="simple-number">19.</div><div class="reason-text">Ti amo perché mi ricordi sempre che devo godermi un po' più i traguardi.</div></div></div>
+            <div class="page reason-page" id="page-22"><div class="page-content"><div class="simple-number">20.</div><div class="reason-text">Ti amo perché con te tutto diventa più leggero.</div></div></div>
+
+            <div class="page reason-page" id="page-23"><div class="page-content"><div class="simple-number">21.</div><div class="reason-text">Ti amo perché sorrido ad ogni tuo messaggio, mi fai bene all'anima.</div></div></div>
+            <div class="page reason-page" id="page-24"><div class="page-content"><div class="simple-number">22.</div><div class="reason-text">Ti amo perché ti prendi sempre cura di me.</div></div></div>
+            <div class="page reason-page" id="page-25"><div class="page-content"><div class="simple-number">23.</div><div class="reason-text">Ti amo perché ami me in tutte le mie sfumature.</div></div></div>
+            <div class="page reason-page" id="page-26"><div class="page-content"><div class="simple-number">24.</div><div class="reason-text">Ti amo perché anche solo sentire la tua voce in giornata mi fa sentire accanto a te e mai distante.</div></div></div>
+            <div class="page reason-page" id="page-27"><div class="page-content"><div class="simple-number">25.</div><div class="reason-text">Ti amo per la tua gelosia nei miei confronti che mi fa sentire così tuo.</div></div></div>
+            <div class="page reason-page" id="page-28"><div class="page-content"><div class="simple-number">26.</div><div class="reason-text">Ti amo perché scherziamo sempre.</div></div></div>
+            <div class="page reason-page" id="page-29"><div class="page-content"><div class="simple-number">27.</div><div class="reason-text">Ti amo perché ti soffermi a sentire ogni mia battuta squallida.</div></div></div>
+            <div class="page reason-page" id="page-30"><div class="page-content"><div class="simple-number">28.</div><div class="reason-text">Ti amo perché con te ho capito che l'amore sta nei gesti, nelle piccole cose.</div></div></div>
+            <div class="page reason-page" id="page-31"><div class="page-content"><div class="simple-number">29.</div><div class="reason-text">Ti amo perché a fianco so di avere un qualcosa di unico, raro.</div></div></div>
+            <div class="page reason-page" id="page-32"><div class="page-content"><div class="simple-number">30.</div><div class="reason-text">Ti amo per la tua intraprendenza e forza che ci metti ogni giorno per vivere la giornata.</div></div></div>
+
+            <div class="page reason-page" id="page-33"><div class="page-content"><div class="simple-number">31.</div><div class="reason-text">Ti amo per il tuo modo di essere.</div></div></div>
+            <div class="page reason-page" id="page-34"><div class="page-content"><div class="simple-number">32.</div><div class="reason-text">Ti amo per la tua voglia di spingerti sempre in alto nonostante tutto.</div></div></div>
+            <div class="page reason-page" id="page-35"><div class="page-content"><div class="simple-number">33.</div><div class="reason-text">Ti amo per la dedizione che ci metti nelle cose.</div></div></div>
+            <div class="page reason-page" id="page-36"><div class="page-content"><div class="simple-number">34.</div><div class="reason-text">Ti amo perché mi migliori l'umore con una semplice risata.</div></div></div>
+            <div class="page reason-page" id="page-37"><div class="page-content"><div class="simple-number">35.</div><div class="reason-text">Ti amo perché quando tutto va storto mi basta pensare a te.</div></div></div>
+            <div class="page reason-page" id="page-38"><div class="page-content"><div class="simple-number">36.</div><div class="reason-text">Ti amo perché ci sei in ogni cosa che faccio.</div></div></div>
+            <div class="page reason-page" id="page-39"><div class="page-content"><div class="simple-number">37.</div><div class="reason-text">Ti amo perché sento la tua presenza anche se fisicamente non ci sei.</div></div></div>
+            <div class="page reason-page" id="page-40"><div class="page-content"><div class="simple-number">38.</div><div class="reason-text">Ti amo perché con te non importa il luogo ma il momento, basta che stiamo insieme.</div></div></div>
+            <div class="page reason-page" id="page-41"><div class="page-content"><div class="simple-number">39.</div><div class="reason-text">Ti amo perché con te sto imparando ad apprezzare le piccole cose più di quanto già facessi.</div></div></div>
+            <div class="page reason-page" id="page-42"><div class="page-content"><div class="simple-number">40.</div><div class="reason-text">Ti amo perché tu sai chi sono.</div></div></div>
+
+            <div class="page reason-page" id="page-43"><div class="page-content"><div class="simple-number">41.</div><div class="reason-text">Ti amo perché sei casa.</div></div></div>
+            <div class="page reason-page" id="page-44"><div class="page-content"><div class="simple-number">42.</div><div class="reason-text">Ti amo perché ti cerco in ogni tramonto.</div></div></div>
+            <div class="page reason-page" id="page-45"><div class="page-content"><div class="simple-number">43.</div><div class="reason-text">Ti amo perché in ogni tuo abbraccio l'amore prevale e l'ansia scompare.</div></div></div>
+            <div class="page reason-page" id="page-46"><div class="page-content"><div class="simple-number">44.</div><div class="reason-text">Ti amo perché sei il mio unico rifugio.</div></div></div>
+            <div class="page reason-page" id="page-47"><div class="page-content"><div class="simple-number">45.</div><div class="reason-text">Ti amo perché sei l'unica a conoscere il vero me.</div></div></div>
+            <div class="page reason-page" id="page-48"><div class="page-content"><div class="simple-number">46.</div><div class="reason-text">Ti amo perché quando stiamo insieme vorrei si fermasse il tempo.</div></div></div>
+            <div class="page reason-page" id="page-49"><div class="page-content"><div class="simple-number">47.</div><div class="reason-text">Ti amo perché so chi c'è sotto quella corazza di cui ti fai peso di indossare.</div></div></div>
+            <div class="page reason-page" id="page-50"><div class="page-content"><div class="simple-number">48.</div><div class="reason-text">Ti amo perché non mi aspettavo nulla, non cercavo nulla e sei arrivata nella mia vita improvvisamente.</div></div></div>
+            <div class="page reason-page" id="page-51"><div class="page-content"><div class="simple-number">49.</div><div class="reason-text">Ti amo perché la vita mi ha dato modo di poter conoscere una persona così bella come te.</div></div></div>
+            <div class="page reason-page" id="page-52"><div class="page-content"><div class="simple-number">50.</div><div class="reason-text">Ti amo per il tuo coraggio.</div></div></div>
+
+            <div class="page reason-page" id="page-53"><div class="page-content"><div class="simple-number">51.</div><div class="reason-text">Ti amo per la tua abilità nelle scelte che prendi.</div></div></div>
+            <div class="page reason-page" id="page-54"><div class="page-content"><div class="simple-number">52.</div><div class="reason-text">Ti amo per la tua fedeltà.</div></div></div>
+            <div class="page reason-page" id="page-55"><div class="page-content"><div class="simple-number">53.</div><div class="reason-text">Ti amo per la tua incredibile voglia di credere in me.</div></div></div>
+            <div class="page reason-page" id="page-56"><div class="page-content"><div class="simple-number">54.</div><div class="reason-text">Ti amo per il modo in cui mi motivi.</div></div></div>
+            <div class="page reason-page" id="page-57"><div class="page-content"><div class="simple-number">55.</div><div class="reason-text">Ti amo per la tua premura nel farmi rallentare la presa quando ne ho bisogno (sai che ho difficoltà in questo).</div></div></div>
+            <div class="page reason-page" id="page-58"><div class="page-content"><div class="simple-number">56.</div><div class="reason-text">Ti amo perché sei rimasta accanto a me in uno dei periodi più delicati della mia vita.</div></div></div>
+            <div class="page reason-page" id="page-59"><div class="page-content"><div class="simple-number">57.</div><div class="reason-text">Ti amo perché nonostante il mio errore di giugno, tu sei rimasta lì ad aspettarmi.</div></div></div>
+            <div class="page reason-page" id="page-60"><div class="page-content"><div class="simple-number">58.</div><div class="reason-text">Ti amo perché in quel periodo ho capito che se ti avessi persa non me lo sarei mai più perdonato.</div></div></div>
+            <div class="page reason-page" id="page-61"><div class="page-content"><div class="simple-number">59.</div><div class="reason-text">Ti amo perché con te mi sento un uomo migliore.</div></div></div>
+            <div class="page reason-page" id="page-62"><div class="page-content"><div class="simple-number">60.</div><div class="reason-text">Ti amo perché grazie a te ho acquisito maggiore maturità in determinate scelte, decisioni e atteggiamenti.</div></div></div>
+
+            <div class="page reason-page" id="page-63"><div class="page-content"><div class="simple-number">61.</div><div class="reason-text">Ti amo per la nostra visione che abbiamo della vita, così diversa e lontana da tutti.</div></div></div>
+            <div class="page reason-page" id="page-64"><div class="page-content"><div class="simple-number">62.</div><div class="reason-text">Ti amo perché entrambi ci muoviamo verso la stessa direzione alla ricerca della felicità.</div></div></div>
+            <div class="page reason-page" id="page-65"><div class="page-content"><div class="simple-number">63.</div><div class="reason-text">Ti amo per la tua tenacia.</div></div></div>
+            <div class="page reason-page" id="page-66"><div class="page-content"><div class="simple-number">64.</div><div class="reason-text">Ti amo per l'impegno che ci metti in questa relazione.</div></div></div>
+            <div class="page reason-page" id="page-67"><div class="page-content"><div class="simple-number">65.</div><div class="reason-text">Ti amo perché entrambi siamo in grado di discutere.</div></div></div>
+            <div class="page reason-page" id="page-68"><div class="page-content"><div class="simple-number">66.</div><div class="reason-text">Ti amo perché entrambi siamo in grado di prendere decisioni.</div></div></div>
+            <div class="page reason-page" id="page-69"><div class="page-content"><div class="simple-number">67.</div><div class="reason-text">Ti amo perché non molli la presa al primo ostacolo.</div></div></div>
+            <div class="page reason-page" id="page-70"><div class="page-content"><div class="simple-number">68.</div><div class="reason-text">Ti amo perché non ti arrendi così facilmente.</div></div></div>
+            <div class="page reason-page" id="page-71"><div class="page-content"><div class="simple-number">69.</div><div class="reason-text">Ti amo perché entrambi cerchiamo sempre di riprenderci.</div></div></div>
+            <div class="page reason-page" id="page-72"><div class="page-content"><div class="simple-number">70.</div><div class="reason-text">Ti amo per le nostre litigate (sono segno di una relazione sana).</div></div></div>
+
+            <div class="page reason-page" id="page-73"><div class="page-content"><div class="simple-number">71.</div><div class="reason-text">Ti amo per le nostre promesse.</div></div></div>
+            <div class="page reason-page" id="page-74"><div class="page-content"><div class="simple-number">72.</div><div class="reason-text">Ti amo per la tua empatia.</div></div></div>
+            <div class="page reason-page" id="page-75"><div class="page-content"><div class="simple-number">73.</div><div class="reason-text">Ti amo perché con te ho voglia di dedicarti tutto il mio tempo.</div></div></div>
+            <div class="page reason-page" id="page-76"><div class="page-content"><div class="simple-number">74.</div><div class="reason-text">Ti amo perché con te so che, insieme, possiamo arrivare in alto.</div></div></div>
+            <div class="page reason-page" id="page-77"><div class="page-content"><div class="simple-number">75.</div><div class="reason-text">Ti amo per i tuoi alti e bassi (i crolli fanno parte del processo, se non ce li avessimo significherebbe di star avendo una vita troppo piatta).</div></div></div>
+
+            <div class="page reason-page" id="page-78"><div class="page-content"><div class="simple-number">76.</div><div class="reason-text">Ti amo per la tua capacità di notare ogni singolo dettaglio di me, soprattutto su cose che per me sono banali e a cui non do minimamente importanza (questo è uno dei motivi che mi ha soprattutto colpito sin da subito di te).</div></div></div>
+            <div class="page reason-page" id="page-79"><div class="page-content"><div class="simple-number">77.</div><div class="reason-text">Ti amo perché sei luce.</div></div></div>
+            <div class="page reason-page" id="page-80"><div class="page-content"><div class="simple-number">78.</div><div class="reason-text">Ti amo perché sei di ispirazione.</div></div></div>
+            <div class="page reason-page" id="page-81"><div class="page-content"><div class="simple-number">79.</div><div class="reason-text">Ti amo perché metti grinta in ogni cosa che fai.</div></div></div>
+            <div class="page reason-page" id="page-82"><div class="page-content"><div class="simple-number">80.</div><div class="reason-text">Ti amo per la tua capacità di vederti tutto da sola, senza chiedere mai aiuto a nessuno.</div></div></div>
+
+            <div class="page reason-page" id="page-83"><div class="page-content"><div class="simple-number">81.</div><div class="reason-text">Ti amo perché sopporti tutte le mie battute squallide (ammettilo che ti faccio ridere stronza).</div></div></div>
+            <div class="page reason-page" id="page-84"><div class="page-content"><div class="simple-number">82.</div><div class="reason-text">Ti amo perché sei la mia costante di vita.</div></div></div>
+            <div class="page reason-page" id="page-85"><div class="page-content"><div class="simple-number">83.</div><div class="reason-text">Ti amo perché non riesci ad essere paziente quando ho in serbo una sorpresa per te.</div></div></div>
+            <div class="page reason-page" id="page-86"><div class="page-content"><div class="simple-number">84.</div><div class="reason-text">Ti amo per la tua sincerità.</div></div></div>
+            <div class="page reason-page" id="page-87"><div class="page-content"><div class="simple-number">85.</div><div class="reason-text">Ti amo perché sento che con te la mia vita è radicalmente migliorata.</div></div></div>
+            <div class="page reason-page" id="page-88"><div class="page-content"><div class="simple-number">86.</div><div class="reason-text">Ti amo per tutti i nostri progetti futuri (voglio realizzarli uno ad uno).</div></div></div>
+            <div class="page reason-page" id="page-89"><div class="page-content"><div class="simple-number">87.</div><div class="reason-text">Ti amo perché con te voglio girare il mondo intero.</div></div></div>
+            <div class="page reason-page" id="page-90"><div class="page-content"><div class="simple-number">88.</div><div class="reason-text">Ti amo perché voglio lasciare un ricordo di noi in qualsiasi posto in cui andiamo.</div></div></div>
+            <div class="page reason-page" id="page-91"><div class="page-content"><div class="simple-number">89.</div><div class="reason-text">Ti amo perché sei la mia complice.</div></div></div>
+            <div class="page reason-page" id="page-92"><div class="page-content"><div class="simple-number">90.</div><div class="reason-text">Ti amo perché sei anche la mia migliore amica.</div></div></div>
+
+            <div class="page reason-page" id="page-93"><div class="page-content"><div class="simple-number">91.</div><div class="reason-text">Ti amo per tutte le volte che mi crolli in videochiamata.</div></div></div>
+            <div class="page reason-page" id="page-94"><div class="page-content"><div class="simple-number">92.</div><div class="reason-text">Ti amo perché con te prende vita il bambino felice che si nasconde dentro di me.</div></div></div>
+            <div class="page reason-page" id="page-95"><div class="page-content"><div class="simple-number">93.</div><div class="reason-text">Ti amo perché mi stai insegnando che il tempo può davvero sistemare le cose.</div></div></div>
+            <div class="page reason-page" id="page-96"><div class="page-content"><div class="simple-number">94.</div><div class="reason-text">Ti amo perché sei certezza.</div></div></div>
+            <div class="page reason-page" id="page-97"><div class="page-content"><div class="simple-number">95.</div><div class="reason-text">Ti amo perché nella vita che mi sto creando non riesco a non vederti al mio fianco (ti voglio sempre qui, qui con me).</div></div></div>
+            <div class="page reason-page" id="page-98"><div class="page-content"><div class="simple-number">96.</div><div class="reason-text">Ti amo perché ogni nostro bacio si trasforma in aria di casa.</div></div></div>
+            <div class="page reason-page" id="page-99"><div class="page-content"><div class="simple-number">97.</div><div class="reason-text">Ti amo perché ogni nostro abbraccio ci regala attimi di pace, estraniandoci dalla realtà.</div></div></div>
+            <div class="page reason-page" id="page-100"><div class="page-content"><div class="simple-number">98.</div><div class="reason-text">Ti amo per tutte le foto che ti faccio di nascosto mentre ti soffermi a guardarti ciò che ti circonda.</div></div></div>
+            <div class="page reason-page" id="page-101"><div class="page-content"><div class="simple-number">99.</div><div class="reason-text">Ti amo perché mi completi, mi migliori.</div></div></div>
+            <div class="page reason-page" id="page-102"><div class="page-content"><div class="simple-number">100.</div><div class="reason-text">Ti amo perché mo ce staje tu, non andare via. Lottiamo sempre per tenerci mano nella mano e superare tutti gli ostacoli e tutte le paure insieme, io sono qui <3.</div></div></div>
+
+            <!-- CONCLUSIONE -->
+            <div class="page" id="page-103">
+                <div class="page-content">
+                    <div class="intro-header">Conclusione</div>
+                    <div class="intro-text">
+                        <p>Siamo giunti al termine ma avrei potuto continuare liberamente a scrivere altri motivi. Ci sarà un secondo volume? Chissà, lo scopriremo soltanto vivendo.</p>
+                        <p>Adesso goditi il regalo finale, anche se ti regalerei il mondo intero se potessi. Meriti il meglio che la vita possa offrirti, sei speciale.</p>
+                        <p>Guardami e chiudi gli occhi, spero ti piaccia.</p>
+                        <p>Buon compleanno amore mio!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" disabled>← Precedente</button>
+        <button class="nav-btn" id="next-btn">Successiva →</button>
+    </div>
+
+    <div class="page-indicator">
+        <span id="current-page">1</span> / 
+        <span id="total-pages">103</span>
+        <input type="number" id="page-jump" class="page-input" min="1" max="103" placeholder="Pag.">
+    </div>
+
+    <audio id="pageSound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-book-page-turn-1191.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        class Book {
+            constructor() {
+                this.currentPage = 1;
+                this.totalPages = document.querySelectorAll('.page').length;
+                this.isAnimating = false;
+                this.pageSound = document.getElementById('pageSound');
+                this.touchStartX = 0;
+                this.touchStartY = 0;
+                this.init();
+            }
+
+            init() {
+                this.showCurrentPage();
+                this.updateNavigation();
+                this.addEventListeners();
+                this.pageSound.volume = 0.3;
+            }
+
+            addEventListeners() {
+                // Button navigation
+                document.getElementById('next-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.nextPage();
+                });
+                document.getElementById('prev-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.prevPage();
+                });
+
+                // Touch zone navigation
+                document.getElementById('touch-prev').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.prevPage();
+                });
+                document.getElementById('touch-next').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.nextPage();
+                });
+
+                // Page jump input
+                document.getElementById('page-jump').addEventListener('change', (e) => {
+                    const targetPage = parseInt(e.target.value);
+                    if (targetPage >= 1 && targetPage <= this.totalPages) {
+                        this.goToPage(targetPage);
+                    }
+                    e.target.value = '';
+                });
+
+                document.getElementById('page-jump').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        const targetPage = parseInt(e.target.value);
+                        if (targetPage >= 1 && targetPage <= this.totalPages) {
+                            this.goToPage(targetPage);
+                        }
+                        e.target.value = '';
+                    }
+                });
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (this.isAnimating) return;
+                    if (e.key === 'ArrowRight' || e.key === ' ') {
+                        e.preventDefault();
+                        this.nextPage();
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        this.prevPage();
+                    }
+                });
+
+                // Improved swipe detection
+                const bookContainer = document.querySelector('.book-container');
+                
+                bookContainer.addEventListener('touchstart', (e) => {
+                    this.touchStartX = e.touches[0].clientX;
+                    this.touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+
+                bookContainer.addEventListener('touchmove', (e) => {
+                    if (!this.touchStartX || !this.touchStartY) return;
+                    
+                    const touchX = e.touches[0].clientX;
+                    const touchY = e.touches[0].clientY;
+                    const diffX = this.touchStartX - touchX;
+                    const diffY = this.touchStartY - touchY;
+                    
+                    // Only prevent default if it's a horizontal swipe
+                    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 10) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+
+                bookContainer.addEventListener('touchend', (e) => {
+                    if (this.isAnimating || !this.touchStartX || !this.touchStartY) return;
+                    
+                    const touchEndX = e.changedTouches[0].clientX;
+                    const touchEndY = e.changedTouches[0].clientY;
+                    const diffX = this.touchStartX - touchEndX;
+                    const diffY = this.touchStartY - touchEndY;
+                    
+                    // Check if it's a horizontal swipe (not vertical scroll)
+                    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                        if (diffX > 0) {
+                            this.nextPage();
+                        } else {
+                            this.prevPage();
+                        }
+                    }
+                    
+                    this.touchStartX = 0;
+                    this.touchStartY = 0;
+                }, { passive: true });
+
+                // Prevent accidental clicks on navigation while scrolling
+                document.addEventListener('touchstart', (e) => {
+                    if (e.target.classList.contains('nav-btn') || 
+                        e.target.classList.contains('page-input') ||
+                        e.target.classList.contains('touch-zone')) {
+                        e.stopPropagation();
+                    }
+                }, { passive: true });
+            }
+
+            showCurrentPage() {
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active', 'flipping-forward', 'flipping-backward', 'prev-page');
+                });
+                const currentPageElem = document.getElementById(`page-${this.currentPage}`);
+                if (currentPageElem) {
+                    currentPageElem.classList.add('active');
+                    // Scroll to top when changing pages
+                    currentPageElem.scrollTop = 0;
+                }
+            }
+
+            goToPage(targetPage) {
+                if (this.isAnimating || targetPage < 1 || targetPage > this.totalPages || targetPage === this.currentPage) return;
+                
+                this.isAnimating = true;
+                this.playPageSound();
+                
+                const currentPageElem = document.getElementById(`page-${this.currentPage}`);
+                currentPageElem.classList.remove('active');
+                
+                this.currentPage = targetPage;
+                this.showCurrentPage();
+                
+                setTimeout(() => {
+                    this.updateNavigation();
+                    this.isAnimating = false;
+                }, 300);
+            }
+
+            nextPage() {
+                if (this.isAnimating || this.currentPage >= this.totalPages) return;
+                this.isAnimating = true;
+                this.playPageSound();
+                const currentPageElem = document.getElementById(`page-${this.currentPage}`);
+                currentPageElem.classList.add('flipping-forward');
+                setTimeout(() => {
+                    currentPageElem.classList.remove('active', 'flipping-forward');
+                    this.currentPage++;
+                    this.showCurrentPage();
+                    this.updateNavigation();
+                    this.isAnimating = false;
+                }, 600);
+            }
+
+            prevPage() {
+                if (this.isAnimating || this.currentPage <= 1) return;
+                this.isAnimating = true;
+                this.playPageSound();
+                const currentPageElem = document.getElementById(`page-${this.currentPage}`);
+                currentPageElem.classList.remove('active');
+                this.currentPage--;
+                const prevPageElem = document.getElementById(`page-${this.currentPage}`);
+                prevPageElem.classList.add('active', 'flipping-backward');
+                setTimeout(() => {
+                    prevPageElem.classList.remove('flipping-backward');
+                    this.updateNavigation();
+                    this.isAnimating = false;
+                }, 600);
+            }
+
+            playPageSound() {
+                this.pageSound.currentTime = 0;
+                this.pageSound.play().catch(e => console.log("Audio non riprodotto:", e));
+            }
+
+            updateNavigation() {
+                document.getElementById('current-page').textContent = this.currentPage;
+                document.getElementById('total-pages').textContent = this.totalPages;
+                document.getElementById('prev-btn').disabled = this.currentPage === 1;
+                document.getElementById('next-btn').disabled = this.currentPage === this.totalPages;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new Book();
+        });
+
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+
+        // Prevent pull-to-refresh
+        document.addEventListener('touchmove', function(e) {
+            if (e.scale !== 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Improve scroll performance
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') {
+                return;
+            }
+            e.target.style.overflow = 'auto';
+        }, { passive: true });
+    </script>
+</body>
+</html>
